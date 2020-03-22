@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-# component
+# component #cal: 
 /src/components
 # production
 /build
