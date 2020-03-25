@@ -5,19 +5,22 @@ const App = () => {
     const [intialState, updateState] =  useState({
         current : '',
         previous: '',
-        operand : null
+        operand : null,
+        finalAnswer: ''
     })
-    const {current, previous, operand} = intialState
+    const {current, previous, operand, finalAnswer} = intialState
 
     const append = (e) => {
+        //check if the values are fill up
+      
        updateState({current: current + e.target.innerHTML,previous:previous,operand:operand})
+       
     }
     const operator = (e) => {
-        updateState({previous:current, current:'0', operand:e.target.innerHTML})
-
+        updateState({previous:current, current:'', operand:e.target.innerHTML})
     }
     const percent = () => {
-        updateState({current: current !=='0' ? parseFloat(current) / 100 : '0', previous:previous,operand:operand})
+        updateState({current: current !=='' ? parseFloat(current) / 100 : '', previous:previous,operand:operand})
     }
     const equal = () =>{
         if(operand === '/'){
@@ -42,17 +45,22 @@ const App = () => {
     //  
     const clear = () => {
     //setState({current:'0',operand:'',previous:''})
-    updateState({current:'0',previous:'',operand:null})
+    updateState({current:'',previous:'',operand:null})
     }
     const sign = () => {
-       // updateState({current: current.charAt(0) !=='0' && current.charAt(1)!=='.'
+       updateState({current: current.charAt(0) ==='-'? current.slice(1) : `-${current}`, previous:previous,operand:operand})
        // current,  previous:previous, operand:operand})
+
 
     }
    
         return(
             <div className="calculator">
-            <div className="display"> { current ===''? 0 : current}  </div>
+            <div className="display"> 
+                <span>{ current ===''? 0 : current}</span> 
+                <br/>
+                <span >{ finalAnswer }</span> 
+                </div>
 
             <div onClick={clear} className="btn">C</div>
             <div onClick={sign}  className="btn">+/-</div>
