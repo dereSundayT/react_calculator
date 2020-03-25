@@ -1,106 +1,83 @@
-import React , {Component} from 'react'
+import React , {useState} from 'react'
 import './Calculator.css'
 
-class App extends Component {
-    state = {
+const App = () => {
+    const [intialState, updateState] =  useState({
         current : '',
         previous: '',
         operand : null
+    })
+    const {current, previous, operand} = intialState
+
+    const append = (e) => {
+       updateState({current: current + e.target.innerHTML,previous:previous,operand:operand})
+    }
+    const operator = (e) => {
+        updateState({previous:current, current:'0', operand:e.target.innerHTML})
 
     }
-    
-    append = (event) => {
-       //current:event.target.innerHTML
-       const val = event.target.innerHTML
-       if(val === '.'){
-        const checkIfDot = this.state.previous.indexOf('.')
-        this.setState( (prev)=>{
-            return{
-                current: checkIfDot === -1 ? prev.current + '.' : prev.current
-            }
-        })
-           
-       }else{
-        this.setState( (prev)=>{
-            //prev.current :: allows me to access my intial state
-           return{
-            current: prev.current=== '0' ? val : prev.current + val
-           } 
-        })
-       }
-}
+    const percent = () => {
+        updateState({current: current !=='0' ? parseFloat(current) / 100 : '0', previous:previous,operand:operand})
+    }
+    const equal = () =>{
+        if(operand === '/'){
+            updateState({current: parseFloat(previous) / parseFloat(current), previous:'', operand:null})
+        }
+        else if(operand === '*'){
+            updateState({current: parseFloat(previous) * parseFloat(current), previous:'', operand:null})
+        }
+        else if(operand === '+'){
+            updateState({current: parseFloat(previous) + parseFloat(current), previous:'', operand:null})
+        }
+        else if(operand === '-'){
+            updateState({current: parseFloat(previous) - parseFloat(current), previous:'', operand:null})
+        }
+        else if(operand === '%'){
+            updateState({current: parseFloat(previous) % parseFloat(current), previous:'', operand:null})
+        }
+
+
+
+    }
     //  
-    clear = () =>{
-        this.setState({current:'0',operand:'',previous:''})
+    const clear = () => {
+    //setState({current:'0',operand:'',previous:''})
+    updateState({current:'0',previous:'',operand:null})
     }
-    percent = () => {
-        this.setState( (prev) => {
-            return{
-                current: prev.current === '0'? '0' : parseFloat(prev.current) / 100 
-            }
-        })
+    const sign = () => {
+       // updateState({current: current.charAt(0) !=='0' && current.charAt(1)!=='.'
+       // current,  previous:previous, operand:operand})
+
     }
-    sign = () => {
-        this.setState( (prev) => {
-            return{
-                current: prev.current.charAt(0)==='-'  ? prev.current.slice(1) : `-${prev.current}`
-            }
-        }
-        )}
-    operator = (ev) => {
-        const sign = ev.target.innerHTML
-        this.setState( (prev) =>{
-            return{
-                operand : sign,
-                previous: prev.current,
-                current:'0'
-            }
-        })
-        }
-        equal = () =>{
-            const sign = this.state.operand
-            if(sign==='/'){
-                this.setState({current: this.state.previous / this.state.current,previous:null})
-            }else if(sign==='*'){
-                this.setState({current: this.state.previous * this.state.current,previous:null})
-            }else if(sign==='+'){
-                this.setState({current: this.state.previous + this.state.current,previous:null})
-            }else if(sign==='-'){
-                this.setState({current: this.state.previous - this.state.current,previous:null})
-            }
-        }
-    render(){
+   
         return(
             <div className="calculator">
-            <div className="display"> {this.state.current ===''? 0 :this.state.current}  </div>
+            <div className="display"> { current ===''? 0 : current}  </div>
 
-            <div onClick={this.clear} className="btn">C</div>
-            <div onClick={this.sign}  className="btn">+/-</div>
-            <div onClick={this.percent} className="btn">%</div>
-            <div onClick={this.operator} className="btn operator">/</div>
+            <div onClick={clear} className="btn">C</div>
+            <div onClick={sign}  className="btn">+/-</div>
+            <div onClick={percent} className="btn">%</div>
+            <div onClick={operator} className="btn operator">/</div>
         
-            <div onClick={this.append} className="btn">7</div>
-            <div onClick={this.append} className="btn">8</div>
-            <div onClick={this.append} className="btn">9</div>
-            <div onClick={this.operator}  className="btn operator">*</div>
+            <div onClick={append} className="btn">7</div>
+            <div onClick={append} className="btn">8</div>
+            <div onClick={append} className="btn">9</div>
+            <div onClick={operator}  className="btn operator">*</div>
         
-            <div onClick={this.append} className="btn">4</div>
-            <div onClick={this.append} className="btn">5</div>
-            <div onClick={this.append} className="btn">6</div>
-            <div onClick={this.operator} className="btn operator">-</div>
+            <div onClick={append} className="btn">4</div>
+            <div onClick={append} className="btn">5</div>
+            <div onClick={append} className="btn">6</div>
+            <div onClick={operator} className="btn operator">-</div>
         
-            <div onClick={this.append} className="btn">1</div>
-            <div onClick={this.append} className="btn">2</div>
-            <div onClick={this.append} className="btn">3</div>
-            <div onClick={this.operator}  className="btn operator">+</div>
+            <div onClick={append} className="btn">1</div>
+            <div onClick={append} className="btn">2</div>
+            <div onClick={append} className="btn">3</div>
+            <div onClick={operator}  className="btn operator">+</div>
         
-            <div onClick={this.append} className="zero btn">0</div>
-            <div onClick={this.append} className="btn">.</div>
-                <div onClick={this.equal} className="btn operator"> = </div>
-          
-        
+            <div onClick={append} className="zero btn">0</div>
+            <div onClick={append} className="btn">.</div>
+                <div onClick={equal} className="btn operator"> = </div>
           </div>
         )
     }
-}
 export default App

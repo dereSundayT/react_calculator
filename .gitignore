@@ -9,6 +9,7 @@
 /coverage
 # component #cal: 
 /src/components
+
 # production
 /build
 
